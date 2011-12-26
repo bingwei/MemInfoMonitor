@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, MemInfoMonitorActivity!</string>
-    <string name="app_name">MemInfoMonitor</string>
+    <string name="app_name">MemInfo Monitor</string>
+    <string name="no_use">no_use</string>
+    
+    <string name="detail_process_name">detail_process_name</string>
+    <string name="kill_process">kill_process</string>
+    <string name="detail_process_copyright">detail_process_copyright</string>
+    <string name="detail_process_install_dir">detail_process_install_dir</string>
+    <string name="detail_process_data_dir">detail_process_data_dir</string>
+    <string name="detail_process_package_size">detail_process_package_size</string>
+    <string name="detail_process_permission">detail_process_permission</string>
+    <string name="detail_process_service">detail_process_service</string>
+    <string name="detail_process_activity">detail_process_activity</string>
+    
+    <string name="basic_activity">basic_activity: </string>
+    <string name="task_id">task_id: </string>
+    <string name="num_activities">num_activities: </string>
+    <string name="num_running">num_running: </string>
+    
+    <string name="service_start_time">service_start_time: </string>
+    <string name="num_client_connections">num_client_connections: </string>
+    <string name="num_crash">num_crash: </string>
+    <string name="service_property">service_property: </string>
+    <string name="last_running_time">last_running_time: </string>
+    <string name="user_id">user_id: </string>
+    
+        
+    <string name="cpu">cpu: </string>
+    <string name="mem">mem: </string>
+    <string name="start_record_meminfo">Record Meminfo</string>
+    <string name="stop_record_meminfo">Stop</string>
 
 </resources>
