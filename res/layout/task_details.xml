@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content" 
+    android:layout_width="match_parent"
+    android:scrollbars="none">
+    <LinearLayout
+        android:id="@+id/linearlayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingLeft="3dip"
+        android:paddingRight="3dip"
+        android:paddingTop="1dip"
+        android:paddingBottom="1dip">
+        
+            
+        <TextView 
+            android:text="@string/basic_activity"
+            android:textSize="15sp" 
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"   
+            />
+        <TextView 
+            android:id="@+id/basic_activity"
+            android:textSize="15sp" 
+            android:layout_height="wrap_content" 
+            android:layout_width="wrap_content"
+		/>
+        
+        <TextView 
+            android:text="@string/task_id"
+            android:textSize="15sp" 
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"   
+            />
+        <TextView 
+            android:id="@+id/task_id"
+            android:textSize="15sp" 
+            android:layout_height="wrap_content" 
+            android:layout_width="wrap_content"
+		/>
+        
+        <TextView 
+            android:text="@string/num_activities"
+            android:textSize="15sp" 
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"   
+            />
+        <TextView 
+            android:id="@+id/num_activities"
+            android:textSize="15sp" 
+            android:layout_height="wrap_content" 
+            android:layout_width="wrap_content"
+		/>
+        
+        <TextView 
+            android:text="@string/num_running"
+            android:textSize="15sp" 
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"   
+            />
+        <TextView 
+            android:id="@+id/num_running"
+            android:textSize="15sp" 
+            android:layout_height="wrap_content" 
+            android:layout_width="wrap_content"
+		/>
+            
+ 
+    </LinearLayout>
+</ScrollView>

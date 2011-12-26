@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content" 
+    android:layout_width="match_parent"
+    android:scrollbars="none">
+    <LinearLayout
+        android:id="@+id/linearlayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingLeft="3dip"
+        android:paddingRight="3dip"
+        android:paddingTop="1dip"
+        android:paddingBottom="1dip">
+        <LinearLayout android:layout_width="match_parent" 
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView 
+                android:id="@+id/monitor_proc_name" 
+                android:textStyle="bold"
+                android:layout_width="wrap_content" 
+                android:layout_height="fill_parent"
+                android:text="@string/detail_process_name"/>
+            <Button android:id="@+id/btn_meminfo_monitor" 
+                android:layout_width="140sp" 
+                android:layout_height="fill_parent"
+                android:text="@string/start_record_meminfo"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content" 
+    android:layout_width="match_parent"
+    android:scrollbars="none">
+    <LinearLayout
+        android:id="@+id/linearlayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingLeft="3dip"
+        android:paddingRight="3dip"
+        android:paddingTop="1dip"
+        android:paddingBottom="1dip">
+        
+            
+        <TextView 
+            android:text="@string/service_start_time"
+            android:textSize="15sp" 
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"   
+            />
+        <TextView 
+            android:id="@+id/service_start_time"
+            android:textSize="15sp" 
+            android:layout_height="wrap_content" 
+            android:layout_width="wrap_content"
+		/>
+        
+        <TextView 
+            android:text="@string/num_client_connections"
+            android:textSize="15sp" 
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"   
+            />
+        <TextView 
+            android:id="@+id/num_client_connections"
+            android:textSize="15sp" 
+            android:layout_height="wrap_content" 
+            android:layout_width="wrap_content"
+		/>
+        
+        <TextView 
+            android:text="@string/num_crash"
+            android:textSize="15sp" 
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"   
+            />
+        <TextView 
+            android:id="@+id/num_crash"
+            android:textSize="15sp" 
+            android:layout_height="wrap_content" 
+            android:layout_width="wrap_content"
+		/>
+        
+        <TextView 
+            android:text="@string/service_property"
+            android:textSize="15sp" 
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"   
+            />
+        <TextView 
+            android:id="@+id/service_property"
+            android:textSize="15sp" 
+            android:layout_height="wrap_content" 
+            android:layout_width="wrap_content"
+		/>
+        
+        <TextView 
+            android:text="@string/last_running_time"
+            android:textSize="15sp" 
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"   
+            />
+        <TextView 
+            android:id="@+id/last_running_time"
+            android:textSize="15sp" 
+            android:layout_height="wrap_content" 
+            android:layout_width="wrap_content"
+		/>
+        
+        <TextView 
+            android:text="@string/user_id"
+            android:textSize="15sp" 
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"   
+            />
+        <TextView 
+            android:id="@+id/user_id"
+            android:textSize="15sp" 
+            android:layout_height="wrap_content" 
+            android:layout_width="wrap_content"
+		/>
+        
+ 
+    </LinearLayout>
+</ScrollView>
