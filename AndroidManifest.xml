@@ -18,10 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AppInfoActivity" android:label="AppInfoActivity">
-        </activity>
-        <activity android:name=".AppInfoMonitor" android:label="AppInfoMonitor">
-        </activity>
+        <activity android:name=".AppInfoActivity" android:label="AppInfoActivity"/>
+        <activity android:name=".AppInfoMonitor" android:label="AppInfoMonitor"/>
+        <service android:enabled="true" android:name=".AppInfoService"/>
             
     </application>
 

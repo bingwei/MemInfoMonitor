@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -43,6 +44,22 @@ public class MemInfoMonitor extends TabActivity implements TabHost.TabContentFac
         tabHost.addTab(spec);
 
         tabHost.setCurrentTab(0);
+        
+        // Adjust icon size
+        View mView = tabHost.getTabWidget().getChildAt(0);//0是代表第一个Tab
+
+        ImageView imageView = (ImageView)mView.findViewById(android.R.id.icon);//获取控件imageView
+        setImageLayout(imageView, R.drawable.process);
+        imageView = (ImageView)tabHost.getTabWidget().getChildAt(1).findViewById(android.R.id.icon);
+        setImageLayout(imageView, R.drawable.task);
+        imageView  = (ImageView)tabHost.getTabWidget().getChildAt(2).findViewById(android.R.id.icon);
+        setImageLayout(imageView, R.drawable.service);
+    }
+    public void setImageLayout(ImageView iv, int rid){
+    	iv.setImageDrawable(getResources().getDrawable(rid));
+    	iv.setAdjustViewBounds(true);
+    	iv.setMaxHeight(60);
+    	iv.setMaxWidth(60);
     }
     
     public View createTabContent(String tag) {

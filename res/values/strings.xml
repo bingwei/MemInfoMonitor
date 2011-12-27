@@ -5,6 +5,7 @@
     <string name="no_use">no_use</string>
     
     <string name="detail_process_name">detail_process_name</string>
+    <string name="detail_pkg_name">detail_package_name</string>
     <string name="kill_process">kill_process</string>
     <string name="detail_process_copyright">detail_process_copyright</string>
     <string name="detail_process_install_dir">detail_process_install_dir</string>
@@ -31,5 +32,7 @@
     <string name="mem">mem: </string>
     <string name="start_record_meminfo">Record Meminfo</string>
     <string name="stop_record_meminfo">Stop</string>
+    <string name="monitor_proc_name">Process Name</string>
+    <string name="monitor_pkg_name">Package Name</string>
 
 </resources>

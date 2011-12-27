@@ -1,7 +1,6 @@
 package bing.software.meminfomonitor;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import android.app.ListActivity;
 import android.content.Context;
@@ -9,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +15,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
+/**
+ * Update
+ * 1. Set status of app (running/not running)
+ * 2. Resort with App name(currently sorted with pkg_name)
+*/
 public class AppInfoActivity extends ListActivity{
-	private final String TAG = "meminfo_monitor";
 	Context mContext = null;
 	private ArrayList<ApplicationInfo> al_app_info;
 	
@@ -105,6 +106,7 @@ public class AppInfoActivity extends ListActivity{
 		intent.setClass(AppInfoActivity.this, AppInfoMonitor.class);
 		Bundle bl = new Bundle();
 		bl.putString("PROC_NAME", al_app_info.get(position).processName);
+		bl.putString("PKG_NAME", al_app_info.get(position).packageName);
 		intent.putExtras(bl);
 		startActivity(intent);
     }
