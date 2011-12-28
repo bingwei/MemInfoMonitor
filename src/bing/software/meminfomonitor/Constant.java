@@ -10,8 +10,8 @@ import android.util.Log;
 public class Constant {
 	public static final String TAG = "meminfo_monitor";
 	public static final int NOT_EXIST = -1;
-	public static final int MEM_RECORDING = 0;
-	public static final int MEM_STOP = 1;
+	public static final int ON = 0;
+	public static final int OFF = 1;
 	
 	public static int getPssTotal(String proc_name, ActivityManager am){
 		int pid = Constant.NOT_EXIST;
