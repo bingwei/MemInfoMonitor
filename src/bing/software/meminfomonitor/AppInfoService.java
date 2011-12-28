@@ -23,7 +23,9 @@ public class AppInfoService extends Service{
 	private ActivityManager mActivityManager;
 	private NotificationManager mNotificationManager;
 	private Notification notification;
-	private String PROC_NAME;
+	private String procName;
+	private String appName;
+	private String pkgName;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -32,7 +34,6 @@ public class AppInfoService extends Service{
 	
 	 @Override  
     public void onCreate() {  
-        Log.d(Constant.TAG, "Service onCreate");  
         mActivityManager= (ActivityManager)getSystemService(ACTIVITY_SERVICE);
         mNotificationManager= (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         
@@ -43,15 +44,16 @@ public class AppInfoService extends Service{
 	 @Override
 	 public int onStartCommand(Intent intent, int flags, int startId) {
 		 Toast.makeText(this, "My Service Started", Toast.LENGTH_SHORT).show();  
-		 PROC_NAME = intent.getStringExtra("PROC_NAME");
+		 procName = intent.getStringExtra("PROC_NAME");
+		 appName = intent.getStringExtra("APP_NAME");
+		 pkgName = intent.getStringExtra("PKG_NAME");
 		 IntentFilter filter = new IntentFilter();
 		 filter.addAction("bing.software.meminfomonitor.AppInfoService");
 		 registerReceiver(statusReceiver, filter);
-		 Log.d(Constant.TAG, "Service onStart"); 
-		 Log.d(Constant.TAG, "intent.getStringExtra(\"PROC_NAME\"): " + PROC_NAME); 
+		 Log.d(Constant.TAG, "AppInfoService-onStartCommand-intent.getStringExtra(\"PROC_NAME\"): " + procName); 
 		 notificationMonitor();
 		 // Start loop to get pss total value
-		 new Thread(new mPssTotalThread(PROC_NAME, mActivityManager)).start();
+		 new Thread(new mPssTotalThread(procName, mActivityManager)).start();
 //		 return START_STICKY;
 		 return START_REDELIVER_INTENT;
 	 }  
@@ -59,7 +61,6 @@ public class AppInfoService extends Service{
     @Override  
     public void onDestroy() {  
         Toast.makeText(this, "My Service Stopped", Toast.LENGTH_SHORT).show();  
-        Log.d(Constant.TAG, "Service onDestroy");  
         unregisterReceiver(statusReceiver);
         mNotificationManager.cancel(ALERT_ID);
         super.onDestroy();
@@ -70,12 +71,11 @@ public class AppInfoService extends Service{
 		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		
 		PendingIntent appIntent=PendingIntent.getActivity(this,0,notifyIntent,0);
-		
 		int icon = R.drawable.notification_alert;
-		CharSequence tickerText = "MemoryInfo is recording into SD card!";
+		CharSequence tickerText = "MemoryInfo is recording " + appName +" into SD card!";
 		long when = System.currentTimeMillis();
 		notification = new Notification(icon, tickerText, when);
-		notification.setLatestEventInfo(this,"Warning!",PROC_NAME + " is still recording!",appIntent);
+		notification.setLatestEventInfo(this,"Warning!",appName + " is still being recorded!",appIntent);
 		mNotificationManager.notify(ALERT_ID, notification);
     }
       
@@ -93,15 +93,20 @@ public class AppInfoService extends Service{
 		// http://stackoverflow.com/questions/2298208/how-to-discover-memory-usage-of-my-application-in-android
 		public void run(){
 			while(flag){
+				//------------Keep this only for test----------------
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					Log.e(Constant.TAG, e.toString());
+					Log.e(Constant.TAG, "AppInfoService-mPssTotalThread-" + e.toString());
 				}
+				//----------------------------------------------------
 				pssTotal = Constant.getPssTotal(proc_name, am);
 				intent = new Intent();
                 intent.setAction("bing.software.meminfomonitor.AppInfoMonitor");
                 intent.putExtra("PSS_TOTAL",pssTotal);
+                intent.putExtra("PKG_NAME",pkgName);
+                intent.putExtra("APP_NAME",appName);
+                intent.putExtra("FLAG",flag);
                 sendBroadcast(intent);
 			}
 		}
@@ -113,7 +118,6 @@ public class AppInfoService extends Service{
         public void onReceive(Context context, Intent intent) {
             int status = intent.getIntExtra("STATUS", -1);
             if(status == Constant.OFF){                           
-            	Log.i(Constant.TAG, "in status: " + status);
             	flag = false;
             	stopSelf();
             }

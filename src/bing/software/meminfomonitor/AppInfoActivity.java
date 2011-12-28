@@ -1,13 +1,17 @@
 package bing.software.meminfomonitor;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +22,8 @@ import android.widget.TextView;
 /**
  * Update
  * 1. Set status of app (running/not running)
- * 2. Resort with App name(currently sorted with pkg_name)
+ * 2. Resort with App name(currently sorted with pkg_name)(DONE)
+ * 3. Add search bar for user to search app
 */
 public class AppInfoActivity extends ListActivity{
 	Context mContext = null;
@@ -35,9 +40,43 @@ public class AppInfoActivity extends ListActivity{
         setListAdapter(proc_listview_adapter);
 	}
 	
+	@Override
+	protected void onDestroy() {
+		SharedPreferences settings = getSharedPreferences(Constant.STATUS, MODE_PRIVATE);
+		boolean flag = settings.getBoolean(Constant._SERVICE_STATUS, false);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.clear();
+		if(flag){
+			editor.putInt(Constant._MEM_STATUS, Constant.ON);
+			Log.e(Constant.TAG, "AppInfoMonitor-onDestroy-save mem_status: " + Constant.ON);
+		}else{
+			editor.putInt(Constant._MEM_STATUS, Constant.OFF);
+			Log.e(Constant.TAG, "AppInfoMonitor-onDestroy-save mem_status: " + Constant.OFF);
+		}
+	    // Commit the edits!
+		editor.commit();
+
+	    super.onDestroy();
+	}
+	
 	private void initPackageInfo(){
 		PackageManager pm = getApplicationContext().getPackageManager();
 		al_app_info = (ArrayList<ApplicationInfo>) pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
+		Collections.sort(al_app_info, new ComparatorAppName());
+	}
+	
+	class ComparatorAppName implements Comparator<ApplicationInfo>{
+		 public int compare(ApplicationInfo arg0, ApplicationInfo arg1) {
+			 int flag=arg0.loadLabel(getPackageManager()).toString().compareTo(
+					 arg1.loadLabel(getPackageManager()).toString());
+			 	if(flag==0){
+			 		return arg0.packageName.compareTo(
+			 				arg1.packageName);
+			 	}else{
+			 		return flag;
+			 	}  
+		 }
+		 
 	}
 	
 	class MyListAdapter extends BaseAdapter {

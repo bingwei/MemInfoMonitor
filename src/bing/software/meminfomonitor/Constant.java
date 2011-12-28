@@ -12,6 +12,9 @@ public class Constant {
 	public static final int NOT_EXIST = -1;
 	public static final int ON = 0;
 	public static final int OFF = 1;
+	public static final String STATUS = "status";
+	public static final String _MEM_STATUS = "MEM_STATUS";
+	public static final String _SERVICE_STATUS = "SERVICE_STATUS";
 	
 	public static int getPssTotal(String proc_name, ActivityManager am){
 		int pid = Constant.NOT_EXIST;
@@ -26,7 +29,6 @@ public class Constant {
 				break;
 			}
 		}
-		Log.i(Constant.TAG, "pid: " + pid);
 		if(pid == Constant.NOT_EXIST){
 			pssTotal = 0;
 		}else{
@@ -34,7 +36,8 @@ public class Constant {
 			memoryInfoArray = am.getProcessMemoryInfo(pids);
 			pssTotal = memoryInfoArray[0].getTotalPss();
 		}
-		Log.i(Constant.TAG, "getTotalPss: " + pssTotal);
+		Log.i(Constant.TAG, "Constant.getPssTotal-pid: " + pid);
+		Log.i(Constant.TAG, "Constant.getPssTotal-getTotalPss: " + pssTotal);
 		return pssTotal;
 	}
 }
