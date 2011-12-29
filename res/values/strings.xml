@@ -28,11 +28,22 @@
     <string name="user_id">user_id: </string>
     
         
-    <string name="cpu">cpu: </string>
-    <string name="mem">mem: </string>
-    <string name="start_record_meminfo">Start recording..</string>
+    <string name="process_running">Process running</string>
+    <string name="process_not_running">Not running</string>
+    <string name="start_record_meminfo">Start recording</string>
     <string name="stop_record_meminfo">Stop</string>
     <string name="monitor_proc_name">Process Name</string>
     <string name="monitor_pkg_name">Package Name</string>
+    <string name="recording_started">Recording Started</string>
+    <string name="recording_stopped">Recording Stopped</string>
+    <string name="notification">MemoryInfo is recording %s into SD card!</string>
+    <string name="notification_title">Warning!</string>
+    <string name="notification_msg">%s is still being recorded!</string>
+    <string name="another_service_running">%1$s(%2$s) is being recorded.You could click \&#034;Stop\&#034; button to stop it</string>
 
+    <string name="app_data_location">data location: </string>
+    <string name="process_pid">pid: </string>
+    
+        
+        
 </resources>

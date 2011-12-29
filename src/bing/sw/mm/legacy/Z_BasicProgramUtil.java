@@ -1,4 +1,4 @@
-package bing.software.meminfomonitor;
+package bing.sw.mm.legacy;
 
 
 import android.graphics.drawable.Drawable;

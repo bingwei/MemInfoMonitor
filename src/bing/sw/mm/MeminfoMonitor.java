@@ -1,4 +1,4 @@
-package bing.software.meminfomonitor;
+package bing.sw.mm;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -8,8 +8,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import bing.sw.mm.R;
+import bing.sw.mm.activity.AppActivity;
+import bing.sw.mm.activity.ProcessActivity;
+import bing.sw.mm.activity.ServiceActivity;
 
-public class MemInfoMonitor extends TabActivity implements TabHost.TabContentFactory{
+public class MeminfoMonitor extends TabActivity implements TabHost.TabContentFactory{
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,19 +26,19 @@ public class MemInfoMonitor extends TabActivity implements TabHost.TabContentFac
         Intent intent;  // Reusable Intent for each tab
 
         // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent().setClass(this, AppInfoActivity.class);
+        intent = new Intent().setClass(this, AppActivity.class);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec("process").setIndicator("Process",
-                          res.getDrawable(R.drawable.ic_tab_process))
+        spec = tabHost.newTabSpec("application").setIndicator("Application",
+                          res.getDrawable(R.drawable.ic_tab_app))
                       .setContent(intent);
         tabHost.addTab(spec);
 
         // Do the same for the other tabs
-        intent = new Intent().setClass(this, TaskActivity.class);
-        spec = tabHost.newTabSpec("task").setIndicator("Task",
-                          res.getDrawable(R.drawable.ic_tab_task))
-                      .setContent(this);
+        intent = new Intent().setClass(this, ProcessActivity.class);
+        spec = tabHost.newTabSpec("process").setIndicator("Process",
+                          res.getDrawable(R.drawable.ic_tab_process))
+                      .setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, ServiceActivity.class);
@@ -49,9 +53,9 @@ public class MemInfoMonitor extends TabActivity implements TabHost.TabContentFac
         View mView = tabHost.getTabWidget().getChildAt(0);//0是代表第一个Tab
 
         ImageView imageView = (ImageView)mView.findViewById(android.R.id.icon);//获取控件imageView
-        setImageLayout(imageView, R.drawable.process);
+        setImageLayout(imageView, R.drawable.app);
         imageView = (ImageView)tabHost.getTabWidget().getChildAt(1).findViewById(android.R.id.icon);
-        setImageLayout(imageView, R.drawable.task);
+        setImageLayout(imageView, R.drawable.process);
         imageView  = (ImageView)tabHost.getTabWidget().getChildAt(2).findViewById(android.R.id.icon);
         setImageLayout(imageView, R.drawable.service);
     }

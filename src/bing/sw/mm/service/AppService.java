@@ -1,4 +1,4 @@
-package bing.software.meminfomonitor;
+package bing.sw.mm.service;
 
 
 import android.app.ActivityManager;
@@ -13,11 +13,12 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+import bing.sw.mm.R;
+import bing.sw.mm.constant.Constant;
 
 // Reference
 // http://www.eoeandroid.com/thread-45221-1-1.html
-public class AppInfoService extends Service{
-	private static final int ALERT_ID = 1;
+public class AppService extends Service{
 	private boolean flag;
 	private StatusReceiver statusReceiver;
 	private ActivityManager mActivityManager;
@@ -43,12 +44,12 @@ public class AppInfoService extends Service{
     }  
 	 @Override
 	 public int onStartCommand(Intent intent, int flags, int startId) {
-		 Toast.makeText(this, "My Service Started", Toast.LENGTH_SHORT).show();  
-		 procName = intent.getStringExtra("PROC_NAME");
-		 appName = intent.getStringExtra("APP_NAME");
-		 pkgName = intent.getStringExtra("PKG_NAME");
+		 Toast.makeText(this, getString(R.string.recording_started), Toast.LENGTH_SHORT).show();  
+		 procName = intent.getStringExtra(Constant.KEY_PROC_NAME);
+		 appName = intent.getStringExtra(Constant.KEY_APP_NAME);
+		 pkgName = intent.getStringExtra(Constant.KEY_PKG_NAME);
 		 IntentFilter filter = new IntentFilter();
-		 filter.addAction("bing.software.meminfomonitor.AppInfoService");
+		 filter.addAction(Constant.ACTION_APPINFOSERVICE);
 		 registerReceiver(statusReceiver, filter);
 		 Log.d(Constant.TAG, "AppInfoService-onStartCommand-intent.getStringExtra(\"PROC_NAME\"): " + procName); 
 		 notificationMonitor();
@@ -59,10 +60,10 @@ public class AppInfoService extends Service{
 	 }  
   
     @Override  
-    public void onDestroy() {  
-        Toast.makeText(this, "My Service Stopped", Toast.LENGTH_SHORT).show();  
+    public void onDestroy() { 
+        Toast.makeText(this, getString(R.string.recording_stopped), Toast.LENGTH_SHORT).show();  
         unregisterReceiver(statusReceiver);
-        mNotificationManager.cancel(ALERT_ID);
+        mNotificationManager.cancel(Constant.ALERT_ID);
         super.onDestroy();
     }  
     
@@ -72,11 +73,12 @@ public class AppInfoService extends Service{
 		
 		PendingIntent appIntent=PendingIntent.getActivity(this,0,notifyIntent,0);
 		int icon = R.drawable.notification_alert;
-		CharSequence tickerText = "MemoryInfo is recording " + appName +" into SD card!";
+		CharSequence tickerText = String.format(getString(R.string.notification), appName);
 		long when = System.currentTimeMillis();
 		notification = new Notification(icon, tickerText, when);
-		notification.setLatestEventInfo(this,"Warning!",appName + " is still being recorded!",appIntent);
-		mNotificationManager.notify(ALERT_ID, notification);
+		notification.setLatestEventInfo(this,getString(R.string.notification_title),
+				String.format(getString(R.string.notification_msg), appName),appIntent);
+		mNotificationManager.notify(Constant.ALERT_ID, notification);
     }
       
     
@@ -94,19 +96,19 @@ public class AppInfoService extends Service{
 		public void run(){
 			while(flag){
 				//------------Keep this only for test----------------
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					Log.e(Constant.TAG, "AppInfoService-mPssTotalThread-" + e.toString());
-				}
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e) {
+//					Log.e(Constant.TAG, "AppInfoService-mPssTotalThread-" + e.toString());
+//				}
 				//----------------------------------------------------
 				pssTotal = Constant.getPssTotal(proc_name, am);
 				intent = new Intent();
-                intent.setAction("bing.software.meminfomonitor.AppInfoMonitor");
-                intent.putExtra("PSS_TOTAL",pssTotal);
-                intent.putExtra("PKG_NAME",pkgName);
-                intent.putExtra("APP_NAME",appName);
-                intent.putExtra("FLAG",flag);
+                intent.setAction(Constant.ACTION_APPINFOMONITOR);
+                intent.putExtra(Constant.KEY_PSS_TOTAL,pssTotal);
+                intent.putExtra(Constant.KEY_PKG_NAME,pkgName);
+                intent.putExtra(Constant.KEY_APP_NAME,appName);
+                intent.putExtra(Constant.KEY_FLAG,flag);
                 sendBroadcast(intent);
 			}
 		}
@@ -116,7 +118,7 @@ public class AppInfoService extends Service{
     private class StatusReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
-            int status = intent.getIntExtra("STATUS", -1);
+            int status = intent.getIntExtra(Constant.KEY_STATUS, -1);
             if(status == Constant.OFF){                           
             	flag = false;
             	stopSelf();
