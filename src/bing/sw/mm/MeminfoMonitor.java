@@ -12,6 +12,7 @@ import bing.sw.mm.R;
 import bing.sw.mm.activity.AppActivity;
 import bing.sw.mm.activity.ProcessActivity;
 import bing.sw.mm.activity.ServiceActivity;
+import bing.sw.mm.constant.Constant;
 
 public class MeminfoMonitor extends TabActivity implements TabHost.TabContentFactory{
     /** Called when the activity is first created. */
@@ -29,20 +30,20 @@ public class MeminfoMonitor extends TabActivity implements TabHost.TabContentFac
         intent = new Intent().setClass(this, AppActivity.class);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec("application").setIndicator("Application",
+        spec = tabHost.newTabSpec(Constant.TAB_SPEC_APP).setIndicator(getString(R.string.tab_spec_app),
                           res.getDrawable(R.drawable.ic_tab_app))
                       .setContent(intent);
         tabHost.addTab(spec);
 
         // Do the same for the other tabs
         intent = new Intent().setClass(this, ProcessActivity.class);
-        spec = tabHost.newTabSpec("process").setIndicator("Process",
+        spec = tabHost.newTabSpec(Constant.TAB_SPEC_PROCESS).setIndicator(getString(R.string.tab_spec_process),
                           res.getDrawable(R.drawable.ic_tab_process))
                       .setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, ServiceActivity.class);
-        spec = tabHost.newTabSpec("service").setIndicator("Service",
+        spec = tabHost.newTabSpec(Constant.TAB_SPEC_SERVICE).setIndicator(getString(R.string.tab_spec_service),
                           res.getDrawable(R.drawable.ic_tab_service))
                       .setContent(this);
         tabHost.addTab(spec);
@@ -50,13 +51,13 @@ public class MeminfoMonitor extends TabActivity implements TabHost.TabContentFac
         tabHost.setCurrentTab(0);
         
         // Adjust icon size
-        View mView = tabHost.getTabWidget().getChildAt(0);//0是代表第一个Tab
+        View mView = tabHost.getTabWidget().getChildAt(0);//0 means first tab
 
-        ImageView imageView = (ImageView)mView.findViewById(android.R.id.icon);//获取控件imageView
+        ImageView imageView = (ImageView)mView.findViewById(android.R.id.icon);
         setImageLayout(imageView, R.drawable.app);
         imageView = (ImageView)tabHost.getTabWidget().getChildAt(1).findViewById(android.R.id.icon);
         setImageLayout(imageView, R.drawable.process);
-        imageView  = (ImageView)tabHost.getTabWidget().getChildAt(2).findViewById(android.R.id.icon);
+        imageView = (ImageView)tabHost.getTabWidget().getChildAt(2).findViewById(android.R.id.icon);
         setImageLayout(imageView, R.drawable.service);
     }
     public void setImageLayout(ImageView iv, int rid){

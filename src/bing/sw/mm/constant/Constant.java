@@ -16,6 +16,10 @@ public class Constant {
 	public static final int NOT_EXIST = -1;
 	public static final int ON = 0;
 	public static final int OFF = 1;
+	public static final String TAB_SPEC_APP = "application";
+	public static final String TAB_SPEC_PROCESS = "process";
+	public static final String TAB_SPEC_SERVICE = "service";
+	public static final String DEFAULT_REG_EXPRESSION = "";
 	public static final String SP_STATUS = "status";
 	public static final String KEY_MEM_STATUS = "MEM_STATUS";
 	public static final String KEY_SERVICE_STATUS = "SERVICE_STATUS";

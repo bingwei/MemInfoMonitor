@@ -43,7 +43,6 @@ public class AppMonitor extends Activity{
 	private int MEM_STATUS;
 	private DataReceiver dataReceiver;
 	private boolean flag;
-//	private ActivityManager activityManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){

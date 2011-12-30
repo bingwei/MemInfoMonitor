@@ -2,7 +2,13 @@
 <resources>
 
     <string name="app_name">MemInfo Monitor</string>
-    <string name="search_hint">Search application</string>
+    <string name="app_search_bar_hint">Search application</string>
+    <string name="tab_spec_app">Application</string>
+    <string name="tab_spec_process">Process</string>
+    <string name="tab_spec_service">Service</string>
+    
+        
+        
     <string name="no_use">no_use</string>
     
     <string name="detail_process_name">detail_process_name</string>
@@ -44,6 +50,7 @@
 
     <string name="app_data_location">data location: </string>
     <string name="process_pid">pid: </string>
+    <string name="total_pss_value">Total PSS value\nPSS: the proportional set size for dalvik</string>
     
         
         

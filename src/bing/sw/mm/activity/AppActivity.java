@@ -10,11 +10,14 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,8 +30,8 @@ import bing.sw.mm.monitor.AppMonitor;
  * 2. Resort with App name(currently sorted with pkg_name)(DONE)
  * 4. Move all msg into values/string file(DONE)
  * 5. Add thread for loading appinfo (Not need now)
- * 3. Add search bar for user to search app
- * http://developer.android.com/guide/topics/search/search-dialog.html
+ * 3. Add search bar for user to search app (DONE)
+ * http://liangruijun.blog.51cto.com/3061169/729505
  * 6. Merge initPackage into common method, return ArrayList<ApplicationInfo> and things like that (DONE)
  * 7. Add cpu info into recorded file
 */
@@ -36,20 +39,53 @@ public class AppActivity extends ListActivity{
 	Context mContext = null;
 	private ArrayList<ApplicationInfo> appAppInfo;
 	ArrayList<String> runningAppProcessesNames;
+	private EditText etAppSearchBar;
+	private String strRegexp = Constant.DEFAULT_REG_EXPRESSION;
+	private AppListAdapter app_list_adapter;
+	private ArrayList<ApplicationInfo> mAppInfo;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_listview);
         
-		appAppInfo = Constant.getAppInfoSortedWithAppName(getApplicationContext().getPackageManager());
-		runningAppProcessesNames = Constant.getRunningAppProcessesNames(
-				(ActivityManager)getSystemService(ACTIVITY_SERVICE));
+        etAppSearchBar = (EditText)findViewById(R.id.app_search_bar);
+        reloadProcess();
         
-        AppListAdapter app_list_adapter = new AppListAdapter(this);
-        setListAdapter(app_list_adapter);
+        loadAdapter();
+        
+        etAppSearchBar.addTextChangedListener(appSearchBarTextWatcher);
 	}
 	
+	//Reference:
+	//http://liangruijun.blog.51cto.com/3061169/729505
+	private TextWatcher appSearchBarTextWatcher = new TextWatcher(){
+
+		@Override
+		public void afterTextChanged(Editable arg0) {// Do nothing
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {// Do nothing
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			reloadProcessesWhileSearching();
+			loadAdapter();
+		}
+		 
+	 };
+	 
+	 
+	
+	 @Override
+	 protected void onStart() {
+		 reloadProcess();
+		 super.onStart();
+	 }
 	@Override
 	protected void onDestroy() {
 		SharedPreferences settings = getSharedPreferences(Constant.SP_STATUS, MODE_PRIVATE);
@@ -67,6 +103,34 @@ public class AppActivity extends ListActivity{
 	    super.onDestroy();
 	}
 	
+	@SuppressWarnings("unchecked")
+	private void reloadProcess(){
+		appAppInfo = Constant.getAppInfoSortedWithAppName(getApplicationContext().getPackageManager());
+		runningAppProcessesNames = Constant.getRunningAppProcessesNames(
+				(ActivityManager)getSystemService(ACTIVITY_SERVICE));
+		mAppInfo = (ArrayList<ApplicationInfo>) appAppInfo.clone();
+		if(etAppSearchBar.getText().toString().length() != 0){
+			reloadProcessesWhileSearching();
+		}
+		loadAdapter();
+	}
+	
+	private void reloadProcessesWhileSearching(){
+		mAppInfo.clear();
+		strRegexp = etAppSearchBar.getText().toString().toLowerCase();
+		for(ApplicationInfo app : appAppInfo){
+			if(app.loadLabel(getPackageManager()).toString().toLowerCase().contains(strRegexp)
+					|| app.packageName.toLowerCase().contains(strRegexp)){
+				mAppInfo.add(app);
+			}
+		}
+	}
+	
+	private void loadAdapter(){
+		app_list_adapter = new AppListAdapter(this);
+        setListAdapter(app_list_adapter);
+	}
+	
 	
 	
 	class AppListAdapter extends BaseAdapter {
@@ -75,7 +139,7 @@ public class AppActivity extends ListActivity{
 		}
 		
 		public int getCount() {
-		    return appAppInfo.size();
+		    return mAppInfo.size();
 		}
 		
 		@Override
@@ -106,7 +170,7 @@ public class AppActivity extends ListActivity{
 		        holder = (ViewHolder) convertView.getTag();
 		    }
 		
-		    appInfo = appAppInfo.get(position);
+		    appInfo = mAppInfo.get(position);
 		    
 		    holder.app_icon.setImageDrawable(appInfo.loadIcon(getPackageManager()));
 		    holder.app_name.setText(appInfo.loadLabel(getPackageManager()));
@@ -144,8 +208,8 @@ public class AppActivity extends ListActivity{
 		Intent intent = new Intent();
 		intent.setClass(AppActivity.this, AppMonitor.class);
 		Bundle bl = new Bundle();
-		bl.putString(Constant.KEY_PROC_NAME, appAppInfo.get(position).processName);
-		bl.putString(Constant.KEY_PKG_NAME, appAppInfo.get(position).packageName);
+		bl.putString(Constant.KEY_PROC_NAME, mAppInfo.get(position).processName);
+		bl.putString(Constant.KEY_PKG_NAME, mAppInfo.get(position).packageName);
 		intent.putExtras(bl);
 		startActivity(intent);
     }
