@@ -1,17 +1,13 @@
 package bing.sw.mm.activity;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import android.app.ActivityManager;
-import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,10 +25,12 @@ import bing.sw.mm.monitor.AppMonitor;
  * Update
  * 1. Set status of app and if not running set background as grey(running/not running) (DONE)
  * 2. Resort with App name(currently sorted with pkg_name)(DONE)
- * 3. Add search bar for user to search app
- * http://developer.android.com/guide/topics/search/search-dialog.html
  * 4. Move all msg into values/string file(DONE)
  * 5. Add thread for loading appinfo (Not need now)
+ * 3. Add search bar for user to search app
+ * http://developer.android.com/guide/topics/search/search-dialog.html
+ * 6. Merge initPackage into common method, return ArrayList<ApplicationInfo> and things like that (DONE)
+ * 7. Add cpu info into recorded file
 */
 public class AppActivity extends ListActivity{
 	Context mContext = null;
@@ -44,7 +42,9 @@ public class AppActivity extends ListActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_listview);
         
-        initPackageInfo();
+		appAppInfo = Constant.getAppInfoSortedWithAppName(getApplicationContext().getPackageManager());
+		runningAppProcessesNames = Constant.getRunningAppProcessesNames(
+				(ActivityManager)getSystemService(ACTIVITY_SERVICE));
         
         AppListAdapter app_list_adapter = new AppListAdapter(this);
         setListAdapter(app_list_adapter);
@@ -64,36 +64,10 @@ public class AppActivity extends ListActivity{
 			Log.d(Constant.TAG, "AppInfoMonitor-onDestroy-save mem_status: " + Constant.OFF);
 		}
 		editor.commit();
-
 	    super.onDestroy();
 	}
 	
-	private void initPackageInfo(){
-		PackageManager pm = getApplicationContext().getPackageManager();
-		appAppInfo = (ArrayList<ApplicationInfo>) pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
-		Collections.sort(appAppInfo, new ComparatorApplicationInfo());
-		
-		ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
-		ArrayList<RunningAppProcessInfo> runningAppProcesses = (ArrayList<RunningAppProcessInfo>) am.getRunningAppProcesses();
-		runningAppProcessesNames = new ArrayList<String>();
-		for(RunningAppProcessInfo runningAppProcess: runningAppProcesses){
-			runningAppProcessesNames.add(runningAppProcess.processName);
-			Log.d(Constant.TAG, "runningAppProcess.processName:" + runningAppProcess.processName);
-		}
-	}
 	
-	class ComparatorApplicationInfo implements Comparator<ApplicationInfo>{
-		 public int compare(ApplicationInfo arg0, ApplicationInfo arg1) {
-			 int flag=arg0.loadLabel(getPackageManager()).toString().compareTo(
-					 arg1.loadLabel(getPackageManager()).toString());
-			 	if(flag==0){
-			 		return arg0.packageName.compareTo(
-			 				arg1.packageName);
-			 	}else{
-			 		return flag;
-			 	}  
-		 }
-	}
 	
 	class AppListAdapter extends BaseAdapter {
 		public AppListAdapter(Context context) {

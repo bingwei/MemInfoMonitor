@@ -1,9 +1,12 @@
 package bing.sw.mm.constant;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Debug.MemoryInfo;
 import android.util.Log;
 
@@ -24,8 +27,6 @@ public class Constant {
 	public static final String KEY_STATUS = "STATUS";
 	public static final String ACTION_APPINFOSERVICE = "bing.sw.mm.service.AppInfoService";
 	public static final String ACTION_APPINFOMONITOR = "bing.sw.mm.monitor.AppInfoMonitor";
-	private static ArrayList<RunningAppProcessInfo> runningAppProcesses;
-	private static MemoryInfo[] memoryInfoArray;
 	
     // Reference:
     // http://stackoverflow.com/questions/2298208/how-to-discover-memory-usage-of-my-application-in-android
@@ -33,7 +34,7 @@ public class Constant {
 		int pid = Constant.NOT_EXIST;
 		int pssTotal = 0;
 		
-		runningAppProcesses = (ArrayList<RunningAppProcessInfo>) am.getRunningAppProcesses();
+		ArrayList<RunningAppProcessInfo> runningAppProcesses = (ArrayList<RunningAppProcessInfo>) am.getRunningAppProcesses();
 		for(RunningAppProcessInfo runningAppProcess: runningAppProcesses){
 			if(proc_name.equals(runningAppProcess.processName)){
 				pid = runningAppProcess.pid;
@@ -44,11 +45,41 @@ public class Constant {
 			pssTotal = 0;
 		}else{
 			int pids[] = {pid};
-			memoryInfoArray = am.getProcessMemoryInfo(pids);
+			MemoryInfo[] memoryInfoArray = am.getProcessMemoryInfo(pids);
 			pssTotal = memoryInfoArray[0].getTotalPss();
 		}
 		Log.i(Constant.TAG, "Constant.getPssTotal-pid: " + pid);
 		Log.i(Constant.TAG, "Constant.getPssTotal-getTotalPss: " + pssTotal);
 		return pssTotal;
 	}
+	
+	public static ArrayList<ApplicationInfo> getAppInfoSortedWithAppName(PackageManager pm){
+		ArrayList<ApplicationInfo> appAppInfo = (ArrayList<ApplicationInfo>) pm.getInstalledApplications(
+													PackageManager.GET_UNINSTALLED_PACKAGES);
+		Collections.sort(appAppInfo, new ComparatorApplicationInfo(pm));
+		return appAppInfo;
+	}
+	public static ArrayList<String> getRunningAppProcessesNames(ActivityManager am){
+		ArrayList<RunningAppProcessInfo> runningAppProcesses = (ArrayList<RunningAppProcessInfo>) am.getRunningAppProcesses();
+		ArrayList<String> runningAppProcessesNames = new ArrayList<String>();
+		for(RunningAppProcessInfo runningAppProcess: runningAppProcesses){
+			runningAppProcessesNames.add(runningAppProcess.processName);
+		}
+		return runningAppProcessesNames;
+	}
+	public static ArrayList<ApplicationInfo> getRunningAppInfoSortedWithAppName(ActivityManager am, PackageManager pm){
+		ArrayList<ApplicationInfo> runningAppInfo = new ArrayList<ApplicationInfo>();;
+		ArrayList<String> processes = getRunningAppProcessesNames(am);
+		
+		ArrayList<ApplicationInfo> all_app_info = getAppInfoSortedWithAppName(pm);
+		for(ApplicationInfo app: all_app_info){
+			if(processes.contains(app.processName)){
+				runningAppInfo.add(app);
+			}
+		}
+		
+		return runningAppInfo;
+	}
 }
+
+

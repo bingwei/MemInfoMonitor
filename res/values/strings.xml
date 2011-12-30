@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">MemInfo Monitor</string>
+    <string name="search_hint">Search application</string>
     <string name="no_use">no_use</string>
     
     <string name="detail_process_name">detail_process_name</string>

@@ -1,18 +1,13 @@
 package bing.sw.mm.activity;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import android.app.ActivityManager;
-import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,78 +22,21 @@ import bing.sw.mm.monitor.AppMonitor;
 public class ProcessActivity extends ListActivity{
 	Context mContext = null;
 	private ArrayList<ApplicationInfo> runningAppInfo;
-	private ArrayList<RunningAppProcessInfo> runningAppProcesses;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.process_listview);
         
-        initPackageInfo();
+        runningAppInfo = Constant.getRunningAppInfoSortedWithAppName(
+        		(ActivityManager)getSystemService(ACTIVITY_SERVICE),
+        		getApplicationContext().getPackageManager());
         
         ProcessListAdapter process_list_adapter = new ProcessListAdapter(this);
         setListAdapter(process_list_adapter);
 	}
 	
-	
-	private void initPackageInfo(){
-		ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
-		runningAppProcesses = (ArrayList<RunningAppProcessInfo>) am.getRunningAppProcesses();
-		Collections.sort(runningAppProcesses, new ComparatorRunningAppProcessInfo());
-		ArrayList<String> processes = new ArrayList<String>();
-		for(RunningAppProcessInfo runningAppProcess: runningAppProcesses){
-			processes.add(runningAppProcess.processName);
-			Log.d(Constant.TAG, "runningAppProcess.processName:" + runningAppProcess.processName);
-		}
-		
-		PackageManager pm = getApplicationContext().getPackageManager();
-		ArrayList<ApplicationInfo> all_app_info = (ArrayList<ApplicationInfo>) pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
-		runningAppInfo = new ArrayList<ApplicationInfo>();
-		for(ApplicationInfo app: all_app_info){
-			if(processes.contains(app.processName)){
-				runningAppInfo.add(app);
-			}
-		}
-		Collections.sort(runningAppInfo, new ComparatorApplicationInfo());
-		Log.d(Constant.TAG, "runningAppInfo.size(): "+ runningAppInfo.size());
-		Log.d(Constant.TAG, "runningAppProcesses.size(): "+ runningAppProcesses.size());
-		Log.i(Constant.TAG, "init finished");
-	}
-	
-	class ComparatorRunningAppProcessInfo implements Comparator<RunningAppProcessInfo>{
-		 public int compare(RunningAppProcessInfo arg0, RunningAppProcessInfo arg1) {
-			 int flag=arg0.processName.compareTo(arg1.processName);
-			 	if(flag==0){
-			 		return arg0.pid - arg1.pid;
-			 	}else{
-			 		return flag;
-			 	}  
-		 }
-	}
-	
-	class LegacyComparatorApplicationInfo implements Comparator<ApplicationInfo>{
-		 public int compare(ApplicationInfo arg0, ApplicationInfo arg1) {
-			 int flag=arg0.processName.compareTo(arg1.processName);
-			 if(flag==0){
-			 		return arg0.packageName.compareTo(arg1.packageName);
-			 	}else{
-			 		return flag;
-			 	} 
-		 }
-	}
-	
-	class ComparatorApplicationInfo implements Comparator<ApplicationInfo>{
-		 public int compare(ApplicationInfo arg0, ApplicationInfo arg1) {
-			 int flag=arg0.loadLabel(getPackageManager()).toString().compareTo(
-					 arg1.loadLabel(getPackageManager()).toString());
-			 	if(flag==0){
-			 		return arg0.packageName.compareTo(
-			 				arg1.packageName);
-			 	}else{
-			 		return flag;
-			 	}  
-		 }
-	}
+
 	
 	class ProcessListAdapter extends BaseAdapter {
 		public ProcessListAdapter(Context context) {

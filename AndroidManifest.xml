@@ -18,6 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+            
         <activity android:name=".activity.AppActivity" android:label="AppActivity"/>
         <activity android:name=".monitor.AppMonitor" android:label="AppMonitor"/>
         <service android:name=".service.AppService" android:enabled="true" />
