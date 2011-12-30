@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:orientation="vertical">
+     
+     <LinearLayout
+	     android:layout_width="match_parent"
+	     android:layout_height="wrap_content"
+		 android:orientation="vertical">
+		
+		 <!-- process name -->
+		<TextView android:id="@+id/service_process_name"
+			android:textSize="14dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="service_process_name"
+		/>
+		
+	    <!-- service name -->
+		<TextView android:id="@+id/service_service_name"
+			android:textSize="14dip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="service_service_name"
+		/>
+		     
+			
+		<!-- activity since-->
+		<LinearLayout
+	     android:layout_width="match_parent"
+	     android:layout_height="wrap_content"
+		 android:orientation="horizontal">
+			<TextView
+				android:textSize="14dip"
+				android:textStyle="bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/service_active_since"
+			/>
+			<TextView android:id="@+id/service_active_since"
+				android:textSize="14dip"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="service_active_since"
+			/>
+		</LinearLayout>
+		<!-- last activity time-->
+		<LinearLayout
+	     android:layout_width="match_parent"
+	     android:layout_height="wrap_content"
+		 android:orientation="horizontal">
+			<TextView
+				android:textSize="14dip"
+				android:textStyle="bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/service_last_activity_time"
+			/>
+			<TextView android:id="@+id/service_last_activity_time"
+				android:textSize="14dip"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="service_last_activity_time"
+			/>
+		</LinearLayout>
+		<!-- started-->
+		<LinearLayout
+	     android:layout_width="match_parent"
+	     android:layout_height="wrap_content"
+		 android:orientation="horizontal">
+			<TextView
+				android:textSize="14dip"
+				android:textStyle="bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/service_started_status"
+			/>
+			<TextView android:id="@+id/service_started_status"
+				android:textSize="14dip"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="service_started_status"
+			/>
+		</LinearLayout>
+			
+	 </LinearLayout>
+ </LinearLayout>

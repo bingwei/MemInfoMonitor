@@ -26,7 +26,7 @@ public final class R {
         public static final int app_pkg_name=0x7f05000e;
         public static final int app_search_bar=0x7f050010;
         public static final int app_status=0x7f05000f;
-        public static final int basic_activity=0x7f050020;
+        public static final int basic_activity=0x7f050025;
         public static final int btn_kill_process=0x7f050003;
         public static final int btn_meminfo_start=0x7f050016;
         public static final int btn_meminfo_stop=0x7f050015;
@@ -41,17 +41,22 @@ public final class R {
         public static final int img_monitor_app_icon=0x7f050011;
         public static final int last_running_time=0x7f05001e;
         public static final int linearlayout1=0x7f050000;
-        public static final int num_activities=0x7f050022;
+        public static final int num_activities=0x7f050027;
         public static final int num_client_connections=0x7f05001b;
         public static final int num_crash=0x7f05001c;
-        public static final int num_running=0x7f050023;
+        public static final int num_running=0x7f050028;
         public static final int process_app_name=0x7f050018;
         public static final int process_icon=0x7f050017;
         public static final int process_pkg_name=0x7f050019;
         public static final int relativeLayout1=0x7f050001;
+        public static final int service_active_since=0x7f050023;
+        public static final int service_last_activity_time=0x7f050024;
+        public static final int service_process_name=0x7f050020;
         public static final int service_property=0x7f05001d;
+        public static final int service_service_name=0x7f050021;
         public static final int service_start_time=0x7f05001a;
-        public static final int task_id=0x7f050021;
+        public static final int service_started_status=0x7f050022;
+        public static final int task_id=0x7f050026;
         public static final int textView1=0x7f050002;
         public static final int tmp_monitor_pss_total=0x7f050014;
         public static final int tv_monitor_app_name=0x7f050012;
@@ -65,9 +70,11 @@ public final class R {
         public static final int app_monitor=0x7f030003;
         public static final int main=0x7f030004;
         public static final int process_item=0x7f030005;
-        public static final int process_listview=0x7f030006;
+        public static final int process_service_listview=0x7f030006;
         public static final int service_details=0x7f030007;
-        public static final int task_details=0x7f030008;
+        public static final int service_item=0x7f030008;
+        public static final int service_item_bak=0x7f030009;
+        public static final int task_details=0x7f03000a;
     }
     public static final class string {
         public static final int another_service_running=0x7f040025;
@@ -101,10 +108,20 @@ public final class R {
         public static final int process_running=0x7f04001a;
         public static final int recording_started=0x7f040020;
         public static final int recording_stopped=0x7f040021;
+        public static final int service_active_since=0x7f04002d;
+        public static final int service_last_activity_time=0x7f04002e;
+        public static final int service_process_name=0x7f04002b;
         public static final int service_property=0x7f040017;
+        /**  ref: http://stackoverflow.com/questions/3235131/set-textview-text-from-html-formatted-string-resource-in-xml 
+         */
+        public static final int service_service_name=0x7f040029;
         public static final int service_start_time=0x7f040014;
+        public static final int service_started_status=0x7f04002f;
         public static final int start_record_meminfo=0x7f04001c;
         public static final int stop_record_meminfo=0x7f04001d;
+        public static final int str_format_service_process_name=0x7f04002c;
+        public static final int str_format_service_service_name=0x7f04002a;
+        public static final int str_format_service_started_status=0x7f040030;
         public static final int tab_spec_app=0x7f040002;
         public static final int tab_spec_process=0x7f040003;
         public static final int tab_spec_service=0x7f040004;

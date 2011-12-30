@@ -13,7 +13,7 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
-import bing.sw.mm.MeminfoMonitor;
+import bing.sw.mm.main;
 import bing.sw.mm.R;
 import bing.sw.mm.constant.Constant;
 
@@ -69,7 +69,7 @@ public class AppService extends Service{
     }  
     
     public void notificationMonitor(){
-		Intent notifyIntent = new Intent(this, MeminfoMonitor.class);
+		Intent notifyIntent = new Intent(this, main.class);
 		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		
 		PendingIntent appIntent=PendingIntent.getActivity(this,0,notifyIntent,0);

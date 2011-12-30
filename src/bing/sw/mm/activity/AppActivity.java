@@ -36,9 +36,8 @@ import bing.sw.mm.monitor.AppMonitor;
  * 7. Add cpu info into recorded file
 */
 public class AppActivity extends ListActivity{
-	Context mContext = null;
 	private ArrayList<ApplicationInfo> appAppInfo;
-	ArrayList<String> runningAppProcessesNames;
+	private ArrayList<String> runningAppProcessesNames;
 	private EditText etAppSearchBar;
 	private String strRegexp = Constant.DEFAULT_REG_EXPRESSION;
 	private AppListAdapter app_list_adapter;
@@ -50,10 +49,6 @@ public class AppActivity extends ListActivity{
         setContentView(R.layout.app_listview);
         
         etAppSearchBar = (EditText)findViewById(R.id.app_search_bar);
-        reloadProcess();
-        
-        loadAdapter();
-        
         etAppSearchBar.addTextChangedListener(appSearchBarTextWatcher);
 	}
 	
@@ -134,6 +129,7 @@ public class AppActivity extends ListActivity{
 	
 	
 	class AppListAdapter extends BaseAdapter {
+		Context mContext = null;
 		public AppListAdapter(Context context) {
 		    mContext = context;
 		}

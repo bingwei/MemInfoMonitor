@@ -53,5 +53,28 @@
     <string name="total_pss_value">Total PSS value\nPSS: the proportional set size for dalvik</string>
     
         
+    <!-- ref: http://stackoverflow.com/questions/3235131/set-textview-text-from-html-formatted-string-resource-in-xml -->
+    <string name="service_service_name">Service: </string>
+    <string name="str_format_service_service_name">
+        <![CDATA[
+        <b>Service: </b>%1$s
+		]]>
+    </string>   
+        
+    <string name="service_process_name">Process: </string>
+    <string name="str_format_service_process_name">
+        <![CDATA[
+        <b>Process: </b>%1$s (PID: %2$d)
+		]]>
+    </string>  
+    <string name="service_active_since">Active since: </string>
+    <string name="service_last_activity_time">Last activity time: </string>
+    <string name="service_started_status">Started: </string>
+    <string name="str_format_service_started_status">
+        <![CDATA[
+        <b>Started: </b>%1$b
+		]]>
+    </string>  
+        
         
 </resources>

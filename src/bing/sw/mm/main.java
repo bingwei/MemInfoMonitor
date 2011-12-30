@@ -14,7 +14,7 @@ import bing.sw.mm.activity.ProcessActivity;
 import bing.sw.mm.activity.ServiceActivity;
 import bing.sw.mm.constant.Constant;
 
-public class MeminfoMonitor extends TabActivity implements TabHost.TabContentFactory{
+public class main extends TabActivity implements TabHost.TabContentFactory{
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,10 +45,10 @@ public class MeminfoMonitor extends TabActivity implements TabHost.TabContentFac
         intent = new Intent().setClass(this, ServiceActivity.class);
         spec = tabHost.newTabSpec(Constant.TAB_SPEC_SERVICE).setIndicator(getString(R.string.tab_spec_service),
                           res.getDrawable(R.drawable.ic_tab_service))
-                      .setContent(this);
+                      .setContent(intent);
         tabHost.addTab(spec);
 
-        tabHost.setCurrentTab(0);
+        tabHost.setCurrentTab(2);// Update to 0 for open App tab first
         
         // Adjust icon size
         View mView = tabHost.getTabWidget().getChildAt(0);//0 means first tab

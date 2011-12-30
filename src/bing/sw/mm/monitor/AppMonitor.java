@@ -80,7 +80,7 @@ public class AppMonitor extends Activity{
 		SharedPreferences settings = getSharedPreferences(Constant.SP_STATUS, MODE_PRIVATE);
 		MEM_STATUS = settings.getInt(Constant.KEY_MEM_STATUS, Constant.OFF);
         buttonMonitor(MEM_STATUS);
-        Log.d(Constant.TAG, "AppInfoMonitor-onCreate-retrieved mem_status: " + MEM_STATUS);
+//        Log.d(Constant.TAG, "AppInfoMonitor-onCreate-retrieved mem_status: " + MEM_STATUS);
 		
 		btn_meminfo_start.setOnClickListener(new View.OnClickListener() {
 			@Override

@@ -20,13 +20,12 @@ import bing.sw.mm.constant.Constant;
 import bing.sw.mm.monitor.AppMonitor;
 
 public class ProcessActivity extends ListActivity{
-	Context mContext = null;
 	private ArrayList<ApplicationInfo> runningAppInfo;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.process_listview);
+        setContentView(R.layout.process_service_listview);
         
         runningAppInfo = Constant.getRunningAppInfoSortedWithAppName(
         		(ActivityManager)getSystemService(ACTIVITY_SERVICE),
@@ -39,6 +38,7 @@ public class ProcessActivity extends ListActivity{
 
 	
 	class ProcessListAdapter extends BaseAdapter {
+		Context mContext = null;
 		public ProcessListAdapter(Context context) {
 		    mContext = context;
 		}

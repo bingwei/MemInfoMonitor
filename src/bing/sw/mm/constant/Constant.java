@@ -1,14 +1,18 @@
 package bing.sw.mm.constant;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Debug.MemoryInfo;
-import android.util.Log;
 
 public class Constant {
 	public static final String TAG = "meminfo_monitor";
@@ -20,7 +24,9 @@ public class Constant {
 	public static final String TAB_SPEC_PROCESS = "process";
 	public static final String TAB_SPEC_SERVICE = "service";
 	public static final String DEFAULT_REG_EXPRESSION = "";
-	public static final String SP_STATUS = "status";
+	public static final String SP_STATUS = "SP_STATUS";
+	public static final String SP_BOOT_UP_TIME = "SP_BOOT_UP_TIME";
+	public static final String KEY_BOOT_UP_TIME = "BOOT_UP_TIME";
 	public static final String KEY_MEM_STATUS = "MEM_STATUS";
 	public static final String KEY_SERVICE_STATUS = "SERVICE_STATUS";
 	public static final String KEY_PROC_NAME = "PROC_NAME";
@@ -52,9 +58,15 @@ public class Constant {
 			MemoryInfo[] memoryInfoArray = am.getProcessMemoryInfo(pids);
 			pssTotal = memoryInfoArray[0].getTotalPss();
 		}
-		Log.i(Constant.TAG, "Constant.getPssTotal-pid: " + pid);
-		Log.i(Constant.TAG, "Constant.getPssTotal-getTotalPss: " + pssTotal);
+//		Log.i(Constant.TAG, "Constant.getPssTotal-pid: " + pid);
+//		Log.i(Constant.TAG, "Constant.getPssTotal-getTotalPss: " + pssTotal);
 		return pssTotal;
+	}
+	
+	public static long getUpTime(Activity context) { 
+		SharedPreferences sharedPreferences=context.getSharedPreferences(Constant.SP_BOOT_UP_TIME, Context.MODE_PRIVATE); 
+		long seconds= sharedPreferences.getLong(Constant.KEY_BOOT_UP_TIME, new Date(System.currentTimeMillis()).getTime()); 
+		return seconds; 
 	}
 	
 	public static ArrayList<ApplicationInfo> getAppInfoSortedWithAppName(PackageManager pm){
@@ -81,8 +93,13 @@ public class Constant {
 				runningAppInfo.add(app);
 			}
 		}
-		
 		return runningAppInfo;
+	}
+	
+	public static ArrayList<RunningServiceInfo> getRunningServiceInfoSortedWithProcess(ActivityManager am){
+		ArrayList<RunningServiceInfo> runningServiceInfo = (ArrayList<RunningServiceInfo>) am.getRunningServices(100);
+		Collections.sort(runningServiceInfo, new ComparatorRunningServiceInfo(am));
+		return runningServiceInfo;
 	}
 }
 
