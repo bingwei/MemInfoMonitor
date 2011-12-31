@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import bing.sw.mm.R;
@@ -40,7 +41,9 @@ public class AppMonitor extends Activity{
 	private Button btn_meminfo_start;
 	private Button btn_meminfo_stop;
 	private ImageView img_monitor_app_icon;
+	private CheckBox cb_save_to_file;
 	private int MEM_STATUS;
+	private int IS_RECORED_TO_FILE;
 	private DataReceiver dataReceiver;
 	private boolean flag;
 	
@@ -55,6 +58,8 @@ public class AppMonitor extends Activity{
 		btn_meminfo_start = (Button)findViewById(R.id.btn_meminfo_start);
 		btn_meminfo_stop = (Button)findViewById(R.id.btn_meminfo_stop);
 		img_monitor_app_icon = (ImageView)findViewById(R.id.img_monitor_app_icon);
+		cb_save_to_file = (CheckBox)findViewById(R.id.cb_save_to_file);
+		IS_RECORED_TO_FILE = cb_save_to_file.isChecked()? Constant.ON: Constant.OFF;
 		
 		// Get data from AppInfoActivity
 		Intent intent = getIntent();
@@ -93,6 +98,7 @@ public class AppMonitor extends Activity{
 				myIntent.putExtra(Constant.KEY_PROC_NAME, procName);
 				myIntent.putExtra(Constant.KEY_APP_NAME, appName);
 				myIntent.putExtra(Constant.KEY_PKG_NAME, pkgName);
+				myIntent.putExtra(Constant.KEY_IS_RECORED_TO_FILE, IS_RECORED_TO_FILE);
                 startService(myIntent);
 			}
 		});
@@ -142,7 +148,6 @@ public class AppMonitor extends Activity{
 	    super.onStop();
 	}
 
-	
 	
 	private void buttonMonitor(int status){
 		if(status == Constant.OFF){

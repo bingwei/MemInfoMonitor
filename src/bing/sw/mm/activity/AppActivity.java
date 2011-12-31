@@ -4,12 +4,15 @@ import java.util.ArrayList;
 
 import android.app.ActivityManager;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -29,19 +32,20 @@ import bing.sw.mm.monitor.AppMonitor;
  * 1. Set status of app and if not running set background as grey(running/not running) (DONE)
  * 2. Resort with App name(currently sorted with pkg_name)(DONE)
  * 4. Move all msg into values/string file(DONE)
- * 5. Add thread for loading appinfo (Not need now)
  * 3. Add search bar for user to search app (DONE)
  * http://liangruijun.blog.51cto.com/3061169/729505
  * 6. Merge initPackage into common method, return ArrayList<ApplicationInfo> and things like that (DONE)
+ * 5. Add thread for loading appinfo (DONE)
  * 7. Add cpu info into recorded file
 */
 public class AppActivity extends ListActivity{
 	private ArrayList<ApplicationInfo> appAppInfo;
 	private ArrayList<String> runningAppProcessesNames;
 	private EditText etAppSearchBar;
-	private String strRegexp = Constant.DEFAULT_REG_EXPRESSION;
+//	private String strRegexp = Constant.DEFAULT_REG_EXPRESSION;
 	private AppListAdapter app_list_adapter;
 	private ArrayList<ApplicationInfo> mAppInfo;
+	private ProgressDialog mProgressDialog;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,31 @@ public class AppActivity extends ListActivity{
         
         etAppSearchBar = (EditText)findViewById(R.id.app_search_bar);
         etAppSearchBar.addTextChangedListener(appSearchBarTextWatcher);
+	}
+	
+	@Override
+	protected void onStart() {
+		loadProgressDialog();
+		new mReloadProcessThread(etAppSearchBar.getText().toString()).start();
+		super.onStart();
+	}
+
+	
+	@Override
+	protected void onDestroy() {
+		SharedPreferences settings = getSharedPreferences(Constant.SP_STATUS, MODE_PRIVATE);
+		boolean flag = settings.getBoolean(Constant.KEY_SERVICE_STATUS, false);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.clear();
+		if(flag){
+			editor.putInt(Constant.KEY_MEM_STATUS, Constant.ON);
+			Log.d(Constant.TAG, "AppInfoMonitor-onDestroy-save mem_status: " + Constant.ON);
+		}else{
+			editor.putInt(Constant.KEY_MEM_STATUS, Constant.OFF);
+			Log.d(Constant.TAG, "AppInfoMonitor-onDestroy-save mem_status: " + Constant.OFF);
+		}
+		editor.commit();
+		super.onDestroy();
 	}
 	
 	//Reference:
@@ -68,64 +97,89 @@ public class AppActivity extends ListActivity{
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before,
 				int count) {
-			reloadProcessesWhileSearching();
-			loadAdapter();
+			loadProgressDialog();
+			new mReloadProcessesWhileSearchingThread(etAppSearchBar.getText().toString()).start();
 		}
-		 
 	 };
 	 
-	 
-	
-	 @Override
-	 protected void onStart() {
-		 reloadProcess();
-		 super.onStart();
-	 }
-	@Override
-	protected void onDestroy() {
-		SharedPreferences settings = getSharedPreferences(Constant.SP_STATUS, MODE_PRIVATE);
-		boolean flag = settings.getBoolean(Constant.KEY_SERVICE_STATUS, false);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.clear();
-		if(flag){
-			editor.putInt(Constant.KEY_MEM_STATUS, Constant.ON);
-			Log.d(Constant.TAG, "AppInfoMonitor-onDestroy-save mem_status: " + Constant.ON);
-		}else{
-			editor.putInt(Constant.KEY_MEM_STATUS, Constant.OFF);
-			Log.d(Constant.TAG, "AppInfoMonitor-onDestroy-save mem_status: " + Constant.OFF);
+	class mReloadProcessThread extends Thread{
+		String searchText;
+		public mReloadProcessThread(String searchText){
+			this.searchText = searchText;
 		}
-		editor.commit();
-	    super.onDestroy();
+		public void run(){
+			reloadProcess(searchText);
+			Message msg = new Message();
+			msg.what = 0;
+			handler.sendEmptyMessage(msg.what);
+		}
+	}
+	
+	class mReloadProcessesWhileSearchingThread extends Thread{
+		String searchText;
+		public mReloadProcessesWhileSearchingThread(String searchText){
+			this.searchText = searchText;
+		}
+		public void run(){
+			reloadProcessesWhileSearching(searchText);
+			handler.sendEmptyMessage(0);
+		}
+	}
+	 
+	private void loadProgressDialog(){
+		mProgressDialog = new ProgressDialog(AppActivity.this);
+		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		mProgressDialog.setMessage(getResources().getString(R.string.app_progressbar_title));
+		mProgressDialog.setCancelable(false);
+		mProgressDialog.show();
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void reloadProcess(){
+	private void reloadProcess(String searchText){
 		appAppInfo = Constant.getAppInfoSortedWithAppName(getApplicationContext().getPackageManager());
 		runningAppProcessesNames = Constant.getRunningAppProcessesNames(
 				(ActivityManager)getSystemService(ACTIVITY_SERVICE));
 		mAppInfo = (ArrayList<ApplicationInfo>) appAppInfo.clone();
-		if(etAppSearchBar.getText().toString().length() != 0){
-			reloadProcessesWhileSearching();
+		if(searchText.length() != 0){
+			reloadProcessesWhileSearching(searchText);
 		}
-		loadAdapter();
+		Log.d(Constant.TAG, "RP: appAppInfo size: "+ appAppInfo.size());
+		Log.d(Constant.TAG, "RP: runningAppProcessesNames size: "+ runningAppProcessesNames.size());
+		Log.d(Constant.TAG, "RP: mAppInfo size: "+ mAppInfo.size());
 	}
 	
-	private void reloadProcessesWhileSearching(){
+	private void reloadProcessesWhileSearching(String searchText){
 		mAppInfo.clear();
-		strRegexp = etAppSearchBar.getText().toString().toLowerCase();
+		String strRegexp = searchText.toLowerCase();
 		for(ApplicationInfo app : appAppInfo){
 			if(app.loadLabel(getPackageManager()).toString().toLowerCase().contains(strRegexp)
 					|| app.packageName.toLowerCase().contains(strRegexp)){
 				mAppInfo.add(app);
 			}
 		}
+		Log.d(Constant.TAG, "RPW: appAppInfo size: "+ appAppInfo.size());
+		Log.d(Constant.TAG, "RPW: mAppInfo size: "+ mAppInfo.size());
 	}
+	
 	
 	private void loadAdapter(){
 		app_list_adapter = new AppListAdapter(this);
-        setListAdapter(app_list_adapter);
+        AppActivity.this.setListAdapter(app_list_adapter);
 	}
 	
+
+	private Handler handler = new Handler(){
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 0:
+				mProgressDialog.dismiss();
+				loadAdapter();
+				break;
+			default:
+				super.handleMessage(msg);
+			}
+		}
+	};
 	
 	
 	class AppListAdapter extends BaseAdapter {
@@ -209,6 +263,4 @@ public class AppActivity extends ListActivity{
 		intent.putExtras(bl);
 		startActivity(intent);
     }
-
-		
 }

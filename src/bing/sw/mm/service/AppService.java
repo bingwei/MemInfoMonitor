@@ -103,6 +103,11 @@ public class AppService extends Service{
 //					Log.e(Constant.TAG, "AppInfoService-mPssTotalThread-" + e.toString());
 //				}
 				//----------------------------------------------------
+				
+				// Save To File
+				
+				
+				
 				pssTotal = Constant.getPssTotal(proc_name, am);
 				intent = new Intent();
                 intent.setAction(Constant.ACTION_APPINFOMONITOR);

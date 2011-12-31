@@ -35,6 +35,7 @@ public class Constant {
 	public static final String KEY_FLAG = "FLAG";
 	public static final String KEY_PSS_TOTAL = "PSS_TOTAL";
 	public static final String KEY_STATUS = "STATUS";
+	public static final String KEY_IS_RECORED_TO_FILE = "IS_RECORED_TO_FILE";
 	public static final String ACTION_APPINFOSERVICE = "bing.sw.mm.service.AppInfoService";
 	public static final String ACTION_APPINFOMONITOR = "bing.sw.mm.monitor.AppInfoMonitor";
 	

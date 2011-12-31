@@ -48,12 +48,11 @@ public class main extends TabActivity implements TabHost.TabContentFactory{
                       .setContent(intent);
         tabHost.addTab(spec);
 
-        tabHost.setCurrentTab(2);// Update to 0 for open App tab first
+        tabHost.setCurrentTab(0);
         
         // Adjust icon size
-        View mView = tabHost.getTabWidget().getChildAt(0);//0 means first tab
-
-        ImageView imageView = (ImageView)mView.findViewById(android.R.id.icon);
+        ImageView imageView;
+        imageView = (ImageView)tabHost.getTabWidget().getChildAt(0).findViewById(android.R.id.icon);
         setImageLayout(imageView, R.drawable.app);
         imageView = (ImageView)tabHost.getTabWidget().getChildAt(1).findViewById(android.R.id.icon);
         setImageLayout(imageView, R.drawable.process);

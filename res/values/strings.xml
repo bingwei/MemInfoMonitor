@@ -6,6 +6,7 @@
     <string name="tab_spec_app">Application</string>
     <string name="tab_spec_process">Process</string>
     <string name="tab_spec_service">Service</string>
+    <string name="cb_save_to_file">Save to file</string>
     
         
         
@@ -75,6 +76,7 @@
         <b>Started: </b>%1$b
 		]]>
     </string>  
+    <string name="app_progressbar_title">Please wait for loading...</string>
         
         
 </resources>
