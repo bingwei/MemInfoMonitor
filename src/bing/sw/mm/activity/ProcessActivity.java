@@ -94,6 +94,7 @@ public class ProcessActivity extends ListActivity{
     protected void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent();
 		intent.setClass(ProcessActivity.this, AppMonitor.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		Bundle bl = new Bundle();
 		bl.putString(Constant.KEY_PROC_NAME, runningAppInfo.get(position).processName);
 		bl.putString(Constant.KEY_PKG_NAME, runningAppInfo.get(position).packageName);

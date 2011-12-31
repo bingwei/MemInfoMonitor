@@ -69,7 +69,7 @@ public class AppActivity extends ListActivity{
 		SharedPreferences settings = getSharedPreferences(Constant.SP_STATUS, MODE_PRIVATE);
 		boolean flag = settings.getBoolean(Constant.KEY_SERVICE_STATUS, false);
 		SharedPreferences.Editor editor = settings.edit();
-		editor.clear();
+//		editor.clear();
 		if(flag){
 			editor.putInt(Constant.KEY_MEM_STATUS, Constant.ON);
 			Log.d(Constant.TAG, "AppInfoMonitor-onDestroy-save mem_status: " + Constant.ON);
@@ -143,9 +143,9 @@ public class AppActivity extends ListActivity{
 		if(searchText.length() != 0){
 			reloadProcessesWhileSearching(searchText);
 		}
-		Log.d(Constant.TAG, "RP: appAppInfo size: "+ appAppInfo.size());
-		Log.d(Constant.TAG, "RP: runningAppProcessesNames size: "+ runningAppProcessesNames.size());
-		Log.d(Constant.TAG, "RP: mAppInfo size: "+ mAppInfo.size());
+//		Log.d(Constant.TAG, "RP: appAppInfo size: "+ appAppInfo.size());
+//		Log.d(Constant.TAG, "RP: runningAppProcessesNames size: "+ runningAppProcessesNames.size());
+//		Log.d(Constant.TAG, "RP: mAppInfo size: "+ mAppInfo.size());
 	}
 	
 	private void reloadProcessesWhileSearching(String searchText){
@@ -257,10 +257,12 @@ public class AppActivity extends ListActivity{
     protected void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent();
 		intent.setClass(AppActivity.this, AppMonitor.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		Bundle bl = new Bundle();
 		bl.putString(Constant.KEY_PROC_NAME, mAppInfo.get(position).processName);
 		bl.putString(Constant.KEY_PKG_NAME, mAppInfo.get(position).packageName);
 		intent.putExtras(bl);
 		startActivity(intent);
     }
+    
 }

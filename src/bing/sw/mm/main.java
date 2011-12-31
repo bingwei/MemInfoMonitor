@@ -4,11 +4,12 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import bing.sw.mm.R;
+import android.widget.Toast;
 import bing.sw.mm.activity.AppActivity;
 import bing.sw.mm.activity.ProcessActivity;
 import bing.sw.mm.activity.ServiceActivity;
@@ -20,6 +21,13 @@ public class main extends TabActivity implements TabHost.TabContentFactory{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        // Create folder
+		 if(!Constant.isSDCardAvailable() || !Constant.generateFolder()){
+			 Log.e(Constant.TAG, "Failed to create folder. Please check logcat.");
+			 Toast.makeText(this, getString(R.string.err_fail_to_create_folder), Toast.LENGTH_SHORT).show();
+		 }else{
+			 Toast.makeText(this, "Folder ok", Toast.LENGTH_SHORT).show();
+		 }
 
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost();  // The activity TabHost
@@ -58,6 +66,8 @@ public class main extends TabActivity implements TabHost.TabContentFactory{
         setImageLayout(imageView, R.drawable.process);
         imageView = (ImageView)tabHost.getTabWidget().getChildAt(2).findViewById(android.R.id.icon);
         setImageLayout(imageView, R.drawable.service);
+        
+
     }
     public void setImageLayout(ImageView iv, int rid){
     	iv.setImageDrawable(getResources().getDrawable(rid));
@@ -71,4 +81,7 @@ public class main extends TabActivity implements TabHost.TabContentFactory{
         tv.setText("Content for tab with tag " + tag);
         return tv;
     }
+    
+    
+    
 }

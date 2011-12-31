@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import bing.sw.mm.R;
@@ -27,7 +29,7 @@ import bing.sw.mm.service.AppService;
  * 1. Add thread/service (DONE)
  * 2. Update current view with gotten pssTotal (DONE)
  * 3. Add tip in notice bar for user to remember to stop it (DONE)
- * 4. Record pssTotal into file (finish this later)
+ * 4. Record pssTotal into file (DONE)
  * Bug
  * 1. After second onStop, the mem_status become to OFF (Fixed)
 */
@@ -43,7 +45,7 @@ public class AppMonitor extends Activity{
 	private ImageView img_monitor_app_icon;
 	private CheckBox cb_save_to_file;
 	private int MEM_STATUS;
-	private int IS_RECORED_TO_FILE;
+	private int IS_SAVE_TO_FILE;
 	private DataReceiver dataReceiver;
 	private boolean flag;
 	
@@ -59,7 +61,7 @@ public class AppMonitor extends Activity{
 		btn_meminfo_stop = (Button)findViewById(R.id.btn_meminfo_stop);
 		img_monitor_app_icon = (ImageView)findViewById(R.id.img_monitor_app_icon);
 		cb_save_to_file = (CheckBox)findViewById(R.id.cb_save_to_file);
-		IS_RECORED_TO_FILE = cb_save_to_file.isChecked()? Constant.ON: Constant.OFF;
+		
 		
 		// Get data from AppInfoActivity
 		Intent intent = getIntent();
@@ -84,21 +86,39 @@ public class AppMonitor extends Activity{
 		
 		SharedPreferences settings = getSharedPreferences(Constant.SP_STATUS, MODE_PRIVATE);
 		MEM_STATUS = settings.getInt(Constant.KEY_MEM_STATUS, Constant.OFF);
-        buttonMonitor(MEM_STATUS);
+		IS_SAVE_TO_FILE = settings.getInt(Constant.KEY_IS_SAVE_TO_FILE, Constant.OFF);
+		Log.d(Constant.TAG, "onCreate-mem_status: " + MEM_STATUS);
+        Log.d(Constant.TAG, "onCreate-isSaveToFile: " + IS_SAVE_TO_FILE);
+        componentsMonitor(MEM_STATUS, IS_SAVE_TO_FILE);
 //        Log.d(Constant.TAG, "AppInfoMonitor-onCreate-retrieved mem_status: " + MEM_STATUS);
+        
+        cb_save_to_file.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				SharedPreferences settings = getSharedPreferences(Constant.SP_STATUS, MODE_PRIVATE);
+				SharedPreferences.Editor editor = settings.edit();
+				IS_SAVE_TO_FILE = isChecked? Constant.ON: Constant.OFF;
+				editor.putInt(Constant.KEY_IS_SAVE_TO_FILE, IS_SAVE_TO_FILE);
+				Log.d(Constant.TAG, "setOnCheckedChangeListener-IS_SAVE_TO_FILE: " + IS_SAVE_TO_FILE);
+			    // Commit the edits!
+				editor.commit();
+			}
+        });
 		
 		btn_meminfo_start.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				IS_SAVE_TO_FILE = cb_save_to_file.isChecked()? Constant.ON: Constant.OFF;
 				Intent myIntent;
 				MEM_STATUS = Constant.ON;
-				buttonMonitor(MEM_STATUS);
+				componentsMonitor(MEM_STATUS, IS_SAVE_TO_FILE);
 
 				myIntent = new Intent(AppMonitor.this, AppService.class);
 				myIntent.putExtra(Constant.KEY_PROC_NAME, procName);
 				myIntent.putExtra(Constant.KEY_APP_NAME, appName);
 				myIntent.putExtra(Constant.KEY_PKG_NAME, pkgName);
-				myIntent.putExtra(Constant.KEY_IS_RECORED_TO_FILE, IS_RECORED_TO_FILE);
+				myIntent.putExtra(Constant.KEY_IS_SAVE_TO_FILE, IS_SAVE_TO_FILE);
                 startService(myIntent);
 			}
 		});
@@ -107,7 +127,7 @@ public class AppMonitor extends Activity{
 			public void onClick(View v) {
 				Intent myIntent;
 				MEM_STATUS = Constant.OFF;
-				buttonMonitor(MEM_STATUS);
+				componentsMonitor(MEM_STATUS, IS_SAVE_TO_FILE);
                 myIntent = new Intent();
                 myIntent.setAction(Constant.ACTION_APPINFOSERVICE);
                 myIntent.putExtra(Constant.KEY_STATUS, Constant.OFF);
@@ -121,10 +141,12 @@ public class AppMonitor extends Activity{
 	@Override
 	protected void onStart() {
 		SharedPreferences settings = getSharedPreferences(Constant.SP_STATUS, MODE_PRIVATE);
-		int mem_status = settings.getInt(Constant.KEY_MEM_STATUS, Constant.OFF);
+		MEM_STATUS = settings.getInt(Constant.KEY_MEM_STATUS, Constant.OFF);
+		IS_SAVE_TO_FILE = settings.getInt(Constant.KEY_IS_SAVE_TO_FILE, Constant.OFF);
+        componentsMonitor(MEM_STATUS, IS_SAVE_TO_FILE);
 		Log.d(Constant.TAG, "AppInfoMonitor-onStart-retrieved mem_status: " + MEM_STATUS);
-        buttonMonitor(mem_status);
-        Log.d(Constant.TAG, "onStart: " + mem_status);
+        Log.d(Constant.TAG, "onStart-mem_status: " + MEM_STATUS);
+        Log.d(Constant.TAG, "onStart-isSaveToFile: " + IS_SAVE_TO_FILE);
 
 		// Set broadcast
     	dataReceiver = new DataReceiver();
@@ -138,24 +160,34 @@ public class AppMonitor extends Activity{
 	    unregisterReceiver(dataReceiver);
 		SharedPreferences settings = getSharedPreferences(Constant.SP_STATUS, MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
-		editor.clear();
+//		editor.clear();
 		editor.putInt(Constant.KEY_MEM_STATUS, MEM_STATUS);
 		editor.putBoolean(Constant.KEY_SERVICE_STATUS, flag);
-		Log.d(Constant.TAG, "AppInfoMonitor-onStop-save mem_status: " + MEM_STATUS);
+		Log.d(Constant.TAG, "onStop-mem_status: " + MEM_STATUS);
+		Log.d(Constant.TAG, "onStop-IS_SAVE_TO_FILE: " + IS_SAVE_TO_FILE);
+//		Log.d(Constant.TAG, "AppInfoMonitor-onStop-save mem_status: " + MEM_STATUS);
 	    // Commit the edits!
 		editor.commit();
 
 	    super.onStop();
 	}
+	
 
 	
-	private void buttonMonitor(int status){
-		if(status == Constant.OFF){
+	private void componentsMonitor(int mMemStatus, int mIsSaveToFile){
+		if(mMemStatus == Constant.OFF){
 			btn_meminfo_start.setEnabled(true);
 			btn_meminfo_stop.setEnabled(false);
+			cb_save_to_file.setEnabled(true);
 		}else{
 			btn_meminfo_start.setEnabled(false);
 			btn_meminfo_stop.setEnabled(true);
+			cb_save_to_file.setEnabled(false);
+		}
+		if(mIsSaveToFile == Constant.OFF){
+			cb_save_to_file.setChecked(false);
+		}else{
+			cb_save_to_file.setChecked(true);
 		}
 	}
 	class DataReceiver extends BroadcastReceiver{
@@ -174,7 +206,7 @@ public class AppMonitor extends Activity{
 			}else{
 				tmp_monitor_pss_total.setText(String.format(getString(R.string.another_service_running), app_name, pkg_name));
 			}
-			Log.d(Constant.TAG, "AppInfoMonitor-DataReceiver-received pss_total: " + pss_total);
+//			Log.d(Constant.TAG, "AppInfoMonitor-DataReceiver-received pss_total: " + pss_total);
 		}
 		public int getPssTotal(){
 			return pss_total;
