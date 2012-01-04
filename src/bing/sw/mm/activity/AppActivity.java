@@ -72,10 +72,10 @@ public class AppActivity extends ListActivity{
 //		editor.clear();
 		if(flag){
 			editor.putInt(Constant.KEY_MEM_STATUS, Constant.ON);
-			Log.d(Constant.TAG, "AppInfoMonitor-onDestroy-save mem_status: " + Constant.ON);
+//			Log.d(Constant.TAG, "AppActivity-onDestroy-save mem_status: " + Constant.ON);
 		}else{
 			editor.putInt(Constant.KEY_MEM_STATUS, Constant.OFF);
-			Log.d(Constant.TAG, "AppInfoMonitor-onDestroy-save mem_status: " + Constant.OFF);
+//			Log.d(Constant.TAG, "AppActivity-onDestroy-save mem_status: " + Constant.OFF);
 		}
 		editor.commit();
 		super.onDestroy();
@@ -157,8 +157,8 @@ public class AppActivity extends ListActivity{
 				mAppInfo.add(app);
 			}
 		}
-		Log.d(Constant.TAG, "RPW: appAppInfo size: "+ appAppInfo.size());
-		Log.d(Constant.TAG, "RPW: mAppInfo size: "+ mAppInfo.size());
+//		Log.d(Constant.TAG, "RPW: appAppInfo size: "+ appAppInfo.size());
+//		Log.d(Constant.TAG, "RPW: mAppInfo size: "+ mAppInfo.size());
 	}
 	
 	

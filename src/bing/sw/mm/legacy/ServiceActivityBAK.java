@@ -1,4 +1,4 @@
-package bing.sw.mm.activity;
+package bing.sw.mm.legacy;
 
 import java.util.ArrayList;
 import java.util.Calendar;

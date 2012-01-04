@@ -87,8 +87,8 @@ public class AppMonitor extends Activity{
 		SharedPreferences settings = getSharedPreferences(Constant.SP_STATUS, MODE_PRIVATE);
 		MEM_STATUS = settings.getInt(Constant.KEY_MEM_STATUS, Constant.OFF);
 		IS_SAVE_TO_FILE = settings.getInt(Constant.KEY_IS_SAVE_TO_FILE, Constant.OFF);
-		Log.d(Constant.TAG, "onCreate-mem_status: " + MEM_STATUS);
-        Log.d(Constant.TAG, "onCreate-isSaveToFile: " + IS_SAVE_TO_FILE);
+//		Log.d(Constant.TAG, "onCreate-mem_status: " + MEM_STATUS);
+//        Log.d(Constant.TAG, "onCreate-isSaveToFile: " + IS_SAVE_TO_FILE);
         componentsMonitor(MEM_STATUS, IS_SAVE_TO_FILE);
 //        Log.d(Constant.TAG, "AppInfoMonitor-onCreate-retrieved mem_status: " + MEM_STATUS);
         
@@ -100,7 +100,7 @@ public class AppMonitor extends Activity{
 				SharedPreferences.Editor editor = settings.edit();
 				IS_SAVE_TO_FILE = isChecked? Constant.ON: Constant.OFF;
 				editor.putInt(Constant.KEY_IS_SAVE_TO_FILE, IS_SAVE_TO_FILE);
-				Log.d(Constant.TAG, "setOnCheckedChangeListener-IS_SAVE_TO_FILE: " + IS_SAVE_TO_FILE);
+//				Log.d(Constant.TAG, "setOnCheckedChangeListener-IS_SAVE_TO_FILE: " + IS_SAVE_TO_FILE);
 			    // Commit the edits!
 				editor.commit();
 			}
@@ -144,9 +144,9 @@ public class AppMonitor extends Activity{
 		MEM_STATUS = settings.getInt(Constant.KEY_MEM_STATUS, Constant.OFF);
 		IS_SAVE_TO_FILE = settings.getInt(Constant.KEY_IS_SAVE_TO_FILE, Constant.OFF);
         componentsMonitor(MEM_STATUS, IS_SAVE_TO_FILE);
-		Log.d(Constant.TAG, "AppInfoMonitor-onStart-retrieved mem_status: " + MEM_STATUS);
-        Log.d(Constant.TAG, "onStart-mem_status: " + MEM_STATUS);
-        Log.d(Constant.TAG, "onStart-isSaveToFile: " + IS_SAVE_TO_FILE);
+//		Log.d(Constant.TAG, "AppInfoMonitor-onStart-retrieved mem_status: " + MEM_STATUS);
+//        Log.d(Constant.TAG, "onStart-mem_status: " + MEM_STATUS);
+//        Log.d(Constant.TAG, "onStart-isSaveToFile: " + IS_SAVE_TO_FILE);
 
 		// Set broadcast
     	dataReceiver = new DataReceiver();
@@ -163,8 +163,8 @@ public class AppMonitor extends Activity{
 //		editor.clear();
 		editor.putInt(Constant.KEY_MEM_STATUS, MEM_STATUS);
 		editor.putBoolean(Constant.KEY_SERVICE_STATUS, flag);
-		Log.d(Constant.TAG, "onStop-mem_status: " + MEM_STATUS);
-		Log.d(Constant.TAG, "onStop-IS_SAVE_TO_FILE: " + IS_SAVE_TO_FILE);
+//		Log.d(Constant.TAG, "onStop-mem_status: " + MEM_STATUS);
+//		Log.d(Constant.TAG, "onStop-IS_SAVE_TO_FILE: " + IS_SAVE_TO_FILE);
 //		Log.d(Constant.TAG, "AppInfoMonitor-onStop-save mem_status: " + MEM_STATUS);
 	    // Commit the edits!
 		editor.commit();

@@ -60,7 +60,7 @@ public class AppService extends Service{
 		 IntentFilter filter = new IntentFilter();
 		 filter.addAction(Constant.ACTION_APPINFOSERVICE);
 		 registerReceiver(statusReceiver, filter);
-		 Log.d(Constant.TAG, "AppInfoService-onStartCommand-intent.getStringExtra(\"PROC_NAME\"): " + procName); 
+//		 Log.d(Constant.TAG, "AppService-onStartCommand-intent.getStringExtra(\"PROC_NAME\"): " + procName); 
 		 notificationMonitor();
 		 // Start loop to get pss total value
 		 new Thread(new mPssTotalThread(procName, mActivityManager, isSaveToFile)).start();
@@ -121,7 +121,7 @@ public class AppService extends Service{
 		// http://blog.csdn.net/aerchi/article/details/5364056 (csv write & read)
 		public void run(){
 			if(isSaveToFile == Constant.ON){
-				Log.d(Constant.TAG, "From service-mMemInfoSavedFolderPath: " + Constant.mMemInfoSavedFolderPath);
+//				Log.d(Constant.TAG, "From service-mMemInfoSavedFolderPath: " + Constant.mMemInfoSavedFolderPath);
 				File myFile = new File(Constant.mMemInfoSavedFolderPath + File.separator + pkgName 
 						+ "." + Constant.time4FileName(System.currentTimeMillis()) + ".csv");
 				try {

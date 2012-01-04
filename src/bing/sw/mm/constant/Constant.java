@@ -42,9 +42,12 @@ public class Constant {
 	public static final String KEY_IS_SAVE_TO_FILE = "IS_SAVE_TO_FILE";
 	public static final String ACTION_APPINFOSERVICE = "bing.sw.mm.service.AppInfoService";
 	public static final String ACTION_APPINFOMONITOR = "bing.sw.mm.monitor.AppInfoMonitor";
-	public static final String MEMINFO_SAVED_FOLDER_NAME = ".MemoryInfoMonitor";
+	public static final String MEMINFO_SAVED_FOLDER_NAME = ".bing.sw.mm.MemoryInfoMonitor";
 	public static String mSDCardPath;
 	public static String mMemInfoSavedFolderPath;
+	
+	// Copy raw data from phone
+	// adb pull /sdcard/.bing.sw.mm.MemoryInfoMonitor d:\
 	
     // Reference:
     // http://stackoverflow.com/questions/2298208/how-to-discover-memory-usage-of-my-application-in-android
@@ -118,13 +121,13 @@ public class Constant {
         
         boolean isFolderReady = false;
         if(!folder.exists()){
-        	Log.d(Constant.TAG, "folder not exists.");
+//        	Log.d(Constant.TAG, "folder not exists.");
         	isFolderReady = folder.mkdir();
-        	Log.d(Constant.TAG, "folder created.");
+//        	Log.d(Constant.TAG, "folder created.");
         	isFolderReady = true;
         }else{
         	isFolderReady = true;
-        	Log.d(Constant.TAG, "folder already existed.");
+//        	Log.d(Constant.TAG, "folder already existed.");
         }
         return isFolderReady;
     }
